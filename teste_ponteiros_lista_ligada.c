@@ -45,7 +45,7 @@ uma_lista* preparar_minha_lista() {
     nova_lista -> pe_da_lista = NULL;
   }
   else {
-    printf("\nOH CRAP NO LIST HEAD!\n");
+    printf("\nOH CRAP NO LIST HEAD ALLOCATED!\n");
   }
   return nova_lista;
 }
@@ -61,58 +61,62 @@ um_no* alocar_um_no() {
     novo_no -> conteudo = 42;
   }
   else {
-    printf("\nOH CRAP NO LIST NODE!\n");
+    printf("\nOH CRAP NO LIST NODE ALLOCATED!\n");
   }
   return novo_no;
 }
 
-um_no* adicionar_no_pe(uma_lista **lista_alvo) {
+um_no* adicionar_no_pe(uma_lista *lista_alvo) {
 
   /* existe */
-  if (*lista_alvo != NULL) {
+  if (lista_alvo != NULL) {
 
     /* sem pe */
-    if ((*lista_alvo) -> pe_da_lista == NULL) {
-      (*lista_alvo) -> pe_da_lista = alocar_um_no();
+    if (lista_alvo -> pe_da_lista == NULL) {
+      lista_alvo -> pe_da_lista = alocar_um_no();
     }
     /* com pe, deslocando o pe */
     else {
-      (*lista_alvo) -> pe_da_lista -> proximo = alocar_um_no();
-      (*lista_alvo) -> pe_da_lista = (*lista_alvo) -> pe_da_lista -> proximo;
+      lista_alvo -> pe_da_lista -> proximo = alocar_um_no();
+      lista_alvo -> pe_da_lista = lista_alvo -> pe_da_lista -> proximo;
     }
 
     /* completa informacao da cabeca se faltando */
-    if ((*lista_alvo) -> cabeca_da_lista == NULL) {
-      (*lista_alvo) -> cabeca_da_lista = (*lista_alvo) -> pe_da_lista;
+    if (lista_alvo -> cabeca_da_lista == NULL) {
+      lista_alvo -> cabeca_da_lista = lista_alvo -> pe_da_lista;
     }
 
-    return (*lista_alvo) -> pe_da_lista;
+    return lista_alvo -> pe_da_lista;
   }
   else {
   /* escape de emergencia*/
-    printf("\nOH CRAP NO LIST TO ADD!\n");
+    printf("\nOH CRAP NO LIST HEAD TO ADD NODE!\n");
     return NULL;
   }
+}
+
+void obliterar_lista() {
 }
 
 int main(int argc, char **argv)
 {
   uma_lista *raiz_da_lista;
   um_no *temporario;
-  int numero;
 
   raiz_da_lista = preparar_minha_lista();
 
-  temporario = adicionar_no_pe(&raiz_da_lista);
+  temporario = adicionar_no_pe(raiz_da_lista);
   temporario -> conteudo = 20;
 
-  temporario = adicionar_no_pe(&raiz_da_lista);
+  temporario = adicionar_no_pe(raiz_da_lista);
   temporario -> conteudo = 404;
 
-  numero = raiz_da_lista -> cabeca_da_lista -> conteudo;
-  printf("\n|%i|\n", numero);
-  numero = raiz_da_lista -> cabeca_da_lista -> proximo -> conteudo;
-  printf("\n|%i|\n", numero);
+  temporario = adicionar_no_pe(raiz_da_lista);
+  temporario -> conteudo = 1337;
+
+  printf("\n|%i|\n", raiz_da_lista -> cabeca_da_lista -> conteudo);
+  printf("\n|%i|\n", raiz_da_lista -> cabeca_da_lista -> proximo -> conteudo);
+  printf("\n|%i|\n", raiz_da_lista -> pe_da_lista -> conteudo);
   return 0;
 }
 
