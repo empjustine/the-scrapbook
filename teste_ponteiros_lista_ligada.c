@@ -95,7 +95,24 @@ um_no* adicionar_no_pe(uma_lista *lista_alvo) {
   }
 }
 
-void obliterar_lista() {
+void obliterar_lista(uma_lista *lista_alvo) {
+  um_no *cursor;
+  cursor = NULL;
+
+  if (lista_alvo != NULL) {
+    while(lista_alvo -> cabeca_da_lista != NULL) {
+      /* guarda o proximo no */
+      cursor = lista_alvo -> cabeca_da_lista -> proximo;
+      /* apaga o no na cabeca */
+      free(lista_alvo -> cabeca_da_lista);
+      lista_alvo -> cabeca_da_lista = NULL;
+      /* anda pro proximo no */
+      lista_alvo -> cabeca_da_lista = cursor;
+    }
+  }
+
+  free(lista_alvo);
+  lista_alvo = NULL;
 }
 
 int main(int argc, char **argv)
@@ -117,6 +134,9 @@ int main(int argc, char **argv)
   printf("\n|%i|\n", raiz_da_lista -> cabeca_da_lista -> conteudo);
   printf("\n|%i|\n", raiz_da_lista -> cabeca_da_lista -> proximo -> conteudo);
   printf("\n|%i|\n", raiz_da_lista -> pe_da_lista -> conteudo);
+
+  obliterar_lista(raiz_da_lista);
+
   return 0;
 }
 
